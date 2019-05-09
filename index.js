@@ -6,6 +6,7 @@ const server = express();
 const db = require('./data/db.js')
 const { find } = db
 const { insert } = db
+const { findById } = db
 
 //middleware
 server.use(express.json())
@@ -42,5 +43,19 @@ server.get('/users', (req, res) => {
     })
     .catch(err => {
         res.status(500).send(err, "The users' information could not be retireved.")
+    })
+})
+
+//Get by id request endpoint~~~~~~~~~~~~~
+
+server.get('/users/:id', (req, res) => {
+    const { id } = req.params
+    
+    findById(id)
+    .then(identifiedUser => {
+        res.json(identifiedUser)
+    })
+    .catch(err => {
+        res.status(404).send(err, "No user with that id found.")
     })
 })
